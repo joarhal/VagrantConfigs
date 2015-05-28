@@ -1,0 +1,35 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
+VAGRANTFILE_API_VERSION = "2"
+ 
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+    config.vm.provider "virtualbox" do |v|
+      v.memory = 512
+      v.cpus = 1
+    end
+    config.vm.box = "hashicorp/precise32"
+    #config.vm.box = "ubuntu/trusty64"
+    #config.vm.box = "ubuntu_14.04"
+    #config.vm.box_url = "https://oss-binaries.phusionpassenger.com/vagrant/boxes/latest/ubuntu-14.04-amd64-vbox.box"
+    #config.vm.box = "ubuntu_12.04"
+    #config.vm.box_url = "http://goo.gl/8kWkm"
+    #config.vm.box = "centos_7"
+    #config.vm.box_url = "https://github.com/holms/vagrant-centos7-box/releases/download/7.1.1503.001/CentOS-7.1.1503-x86_64-netboot.box"
+ 
+    config.vm.network "forwarded_port", guest: 8001, host: 8010 #WS SERVER
+ 
+    config.vm.provision "puppet" do |puppet|
+      puppet.manifests_path = "manifests"
+      puppet.manifest_file = "default.pp"
+
+      puppet.module_path = "modules"
+    end
+end
+
+
+#installing modules:
+#puppet module install thomasvandoren-redis --modulepath /vagrant/modules/
+
+#apply pp from os
+#puppet apply --modulepath=/vagrant/modules default.pp
